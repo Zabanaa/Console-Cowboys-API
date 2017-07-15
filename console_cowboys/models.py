@@ -48,6 +48,8 @@ class Job(db.Model):
         except Exception as e:
             print(e)
 
+        return self
+
     def __repr__(self):
         return "{} at {} in {}".format(self.title,
                                        self.company_name,
