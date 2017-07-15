@@ -4,11 +4,11 @@ from sqlalchemy_utils import ChoiceType
 
 class Job(db.Model):
 
-    CONTRACT_TYPES = (
-        "full-time": "Full Time",
-        "freelance": "Freelance / Contract",
-        "internship": "Internship"
-    )
+    CONTRACT_TYPES = [
+        ("full-time", "Full Time"),
+        ("freelance", "Freelance / Contract"),
+        ("internship", "Internship")
+    ]
 
     id                  = db.Column(db.Integer, primary_key=True)
     title               = db.Column(db.String(90), nullable=False)
