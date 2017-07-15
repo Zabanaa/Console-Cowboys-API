@@ -8,9 +8,11 @@ DB_USER     = os.getenv("CONSOLE_COWBOYS_DB_USER")
 DB_HOST     = os.getenv("CONSOLE_COWBOYS_DB_HOST")
 DB_PORT     = os.getenv("CONSOLE_COWBOYS_DB_PORT")
 DB_NAME     = os.getenv("CONSOLE_COWBOYS_DB_NAME")
+DB_PASS     = os.getenv("CONSOLE_COWBOYS_DB_PASSWORD")
 
-SQLALCHEMY_DATABASE_URI    = "postgres://{}@{}:{}/{}".format(
+SQLALCHEMY_DATABASE_URI    = "postgres://{}:{}@{}:{}/{}".format(
                                 DB_USER,
+                                DB_PASS,
                                 DB_HOST,
                                 DB_PORT,
                                 DB_NAME
