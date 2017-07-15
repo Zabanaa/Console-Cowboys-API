@@ -1,12 +1,19 @@
 from datetime import datetime
 from console_cowboys import db
+from sqlalchemy_utils import ChoiceType
 
 class Job(db.Model):
+
+    CONTRACT_TYPES = (
+        "full-time": "Full Time",
+        "freelance": "Freelance / Contract",
+        "internship": "Internship"
+    )
 
     id                  = db.Column(db.Integer, primary_key=True)
     title               = db.Column(db.String(90), nullable=False)
     location            = db.Column(db.String(90), nullable=False)
-    # contract_type       = db.Column(db)
+    contract_type       = db.Column(ChoiceType(CONTRACT_TYPES), nullable=False)
     company_name        = db.Column(db.String(90), nullable=False)
     listing_url         = db.Column(db.String(90), nullable=False)
     is_remote           = db.Column(db.Boolean, default=False)
