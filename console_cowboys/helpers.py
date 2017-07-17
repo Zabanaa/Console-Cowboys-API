@@ -1,6 +1,25 @@
 import re
 from flask import jsonify
 
+class Response(object):
+
+    @classmethod
+    def ok(cls, jobs):
+
+        body        = {
+            "meta": {
+                "type": "success",
+                "status_code": 200
+            },
+            "body": {
+                "count": len(jobs),
+                "jobs": jobs
+            }
+        }
+        response                = jsonify(body)
+        response.status_code    = 200
+        return response
+
 class ErrorResponse(object):
 
     @classmethod
@@ -62,3 +81,32 @@ class ErrorResponse(object):
                 "missing_fields": missing_fields
             }
         })
+
+
+    @classmethod
+    def server_error(cls):
+
+        msg = "Something happened on our part. Please Hang tight while we fix the issue"
+
+        return jsonify({
+
+            "meta": {
+                "type": "error",
+                "status_code": 500
+            },
+
+            "body": {
+
+                "message": msg
+            }
+        })
+
+
+
+
+
+
+
+
+
+
