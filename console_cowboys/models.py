@@ -105,6 +105,14 @@ class Job(db.Model):
 
         return Response.ok(json_jobs)
 
+    @classmethod
+    def remote(cls):
+
+        remote_jobs = cls.query.filter_by(is_remote=True).all()
+        remote_jobs = [remote_job.to_dict() for remote_job in remote_jobs]
+
+        return Response.ok(remote_jobs)
+
     def __repr__(self):
         return "{} at {} in {}".format(self.title,
                                        self.company_name,

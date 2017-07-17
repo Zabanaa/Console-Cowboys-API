@@ -10,8 +10,15 @@ from .models import Job
 
 @app.route("/api/jobs")
 def index():
+
+    query_string = request.args.get("remote")
+
+    if query_string and query_string.lower() == "true":
+        return Job.remote()
+
     return Job.all()
 
 @app.route("/api/jobs/<string:contract_type>")
 def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
+
