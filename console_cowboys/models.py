@@ -1,5 +1,5 @@
 from datetime import datetime
-from console_cowboys.helpers import ErrorResponse
+from console_cowboys.helpers import Response, ErrorResponse
 from console_cowboys import db
 from sqlalchemy_utils import ChoiceType
 from sqlalchemy.exc import IntegrityError
@@ -57,12 +57,46 @@ class Job(db.Model):
                 return ErrorResponse.missing_fields_error(missing_fields)
 
             elif "unique" in cause_of_error:
-                print(ErrorResponse.unique_field_error(cause_of_error))
+                return ErrorResponse.unique_field_error(cause_of_error)
 
             else:
-                print("Something Happened")
+                print(e) # Eventually log it
+                return ErrorResponse.server_error()
 
         return self
+
+
+    def to_dict(self):
+
+        return {
+
+            "title": self.title,
+            "location": self.location,
+            "contract_type": self.contract_type,
+            "company_name": self.company_name,
+            "listing_url": self.listing_url,
+            "is_remote": self.is_remote,
+        }
+
+    @classmethod
+    def all(cls):
+
+        job_objects = cls.query.all()
+        json_jobs   = [job.to_dict() for job in job_objects]
+
+        try:
+            return Response.ok(json_jobs)
+        except Exception as e:
+            # Log exception
+            return ErrorResponse.server_error()
+
+    @classmethod
+    def filter_by_contract_type(cls, contract_type):
+
+        job_objects = cls.query.filter_by(contract_type=contract_type).all()
+        json_jobs   = [job.to_dict() for job in job_objects]
+
+        return Response.ok(json_jobs)
 
     def __repr__(self):
         return "{} at {} in {}".format(self.title,
