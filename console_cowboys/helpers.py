@@ -18,9 +18,14 @@ class Response(object):
         }
         response                = jsonify(body)
         response.status_code    = 200
+        response.headers["Server"] = "Don't worry bout it"
+
         return response
 
 class ErrorResponse(object):
+
+    bad_request_msg = "You sent a request that our server could not understand. \
+Please make sure it's properly formatted before resending."
 
     @classmethod
     def get_missing_fields(cls, fields):
@@ -41,6 +46,7 @@ class ErrorResponse(object):
     def get_duplicate_key(cls, error_message):
         pattern         = re.compile("\(([^\)]+)\)")
         duplicate_key   = pattern.findall(error_message)[0]
+
         return duplicate_key
 
     @classmethod
@@ -64,6 +70,7 @@ class ErrorResponse(object):
         })
 
         response.status_code = 409
+        response.headers["Server"] = "Don't worry bout it"
 
         return response
 
@@ -87,6 +94,7 @@ class ErrorResponse(object):
         })
 
         response.status_code = 422
+        response.headers["Server"] = "Don't worry bout it"
 
         return response
 
@@ -110,6 +118,8 @@ class ErrorResponse(object):
         })
 
         response.status_code = 500
+        response.headers["Server"] = "Don't worry bout it"
+
         return response
 
     @classmethod
@@ -129,5 +139,31 @@ class ErrorResponse(object):
         })
 
         response.status_code = 404
+        response.headers["Server"] = "Don't worry bout it"
 
         return response
+
+    @classmethod
+    def bad_request(cls, msg=bad_request_msg):
+
+        response    = jsonify({
+
+            "meta": {
+                "type": "error",
+                "status_code": 400
+            },
+
+            "body": {
+
+                "message": msg
+            }
+        })
+
+        response.status_code = 400
+        response.headers["Server"] = "Don't worry bout it"
+
+        return response
+
+
+
+
