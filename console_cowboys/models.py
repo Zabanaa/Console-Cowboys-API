@@ -93,6 +93,13 @@ class Job(db.Model):
     @classmethod
     def filter_by_contract_type(cls, contract_type):
 
+        contract_types = [contract for contract, _ in cls.CONTRACT_TYPES]
+
+        if contract_type not in contract_types:
+            msg = "Invalid contract_type. Expected any of the following: {}"
+            msg = msg.format(", ".join(contract_types))
+            return ErrorResponse.bad_request(msg=msg)
+
         job_objects = cls.query.filter_by(contract_type=contract_type).all()
         json_jobs   = [job.to_dict() for job in job_objects]
 
