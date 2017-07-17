@@ -46,9 +46,9 @@ class ErrorResponse(object):
     @classmethod
     def unique_field_error(cls, error_message):
 
-        duplicate_key = cls.get_duplicate_key(error_message)
+        duplicate_key   = cls.get_duplicate_key(error_message)
 
-        return jsonify({
+        response        = jsonify({
 
             "meta": {
                 "type": "error",
@@ -63,12 +63,16 @@ class ErrorResponse(object):
 
         })
 
+        response.status_code = 409
+
+        return response
+
     @classmethod
     def missing_fields_error(cls, missing_fields):
 
-        missing_fields = cls.get_missing_fields(missing_fields)
+        missing_fields  = cls.get_missing_fields(missing_fields)
 
-        return jsonify({
+        response        =  jsonify({
 
             "meta": {
                 "type": "error",
@@ -82,13 +86,17 @@ class ErrorResponse(object):
             }
         })
 
+        response.status_code = 422
+
+        return response
+
 
     @classmethod
     def server_error(cls):
 
         msg = "Something happened on our part. Please Hang tight while we fix the issue"
 
-        return jsonify({
+        response = jsonify({
 
             "meta": {
                 "type": "error",
@@ -100,6 +108,9 @@ class ErrorResponse(object):
                 "message": msg
             }
         })
+
+        response.status_code = 500
+        return response
 
     @classmethod
     def nonexistent_endpoint(cls):
