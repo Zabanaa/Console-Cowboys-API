@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+from .helpers import ErrorResponse
 
 app     = Flask(__name__)
 app.config.from_object("console_cowboys.config")
@@ -11,16 +12,6 @@ from .models import Job
 def index():
     return Job.all()
 
-@app.route("/api/jobs/full-time")
-def get_full_time_jobs():
-    return Job.filter_by_contract_type("full-time")
-
-@app.route("/api/jobs/freelance")
-def get_freelance_jobs():
-    return Job.filter_by_contract_type("freelance")
-
-@app.route("/api/jobs/internship")
-def get_internship_jobs():
-    return Job.filter_by_contract_type("internship")
-
-
+@app.route("/api/jobs/<string:contract_type>")
+def get_jobs_by_contract_type(contract_type):
+    return Job.filter_by_contract_type(contract_type)
