@@ -72,7 +72,7 @@ class Job(db.Model):
 
             "title": self.title,
             "location": self.location,
-            "contract_type": self.contract_type,
+            "contract_type": self.contract_type.code,
             "company_name": self.company_name,
             "listing_url": self.listing_url,
             "is_remote": self.is_remote,
