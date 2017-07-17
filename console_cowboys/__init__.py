@@ -5,6 +5,8 @@ app     = Flask(__name__)
 app.config.from_object("console_cowboys.config")
 db      = SQLAlchemy(app)
 
+from .models import Job
+
 @app.route("/")
 def index():
-    return "Hello World"
+    return Job.all()
