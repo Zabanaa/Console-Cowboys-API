@@ -101,12 +101,22 @@ class ErrorResponse(object):
             }
         })
 
+    @classmethod
+    def nonexistent_endpoint(cls):
 
+        response    = jsonify({
 
+            "meta": {
+                "type": "error",
+                "status_code": 404
+            },
 
+            "body": {
 
+                "message": "The endpoint you're trying to reach does not exist."
+            }
+        })
 
+        response.status_code = 404
 
-
-
-
+        return response
