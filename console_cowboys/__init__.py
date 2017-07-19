@@ -8,7 +8,7 @@ db      = SQLAlchemy(app)
 
 from .models import Job
 
-@app.route("/api/jobs")
+@app.route("/jobs")
 def index():
 
     query_string = request.args.get("remote")
@@ -18,7 +18,7 @@ def index():
 
     return Job.all()
 
-@app.route("/api/jobs/<string:contract_type>")
+@app.route("/jobs/<string:contract_type>")
 def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
