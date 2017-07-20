@@ -1,14 +1,18 @@
 from flask import Flask, request
+from flask_cors  import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from .helpers import ErrorResponse
 
 app     = Flask(__name__)
+cors    = CORS(app)
 app.config.from_object("console_cowboys.config")
+app.config["CORS_HEADERS"] = 'Content-Type'
 db      = SQLAlchemy(app)
 
 from .models import Job
 
 @app.route("/jobs")
+@cross_origin()
 def index():
 
     query_string = request.args.get("remote")
