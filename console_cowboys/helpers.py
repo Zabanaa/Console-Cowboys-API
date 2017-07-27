@@ -4,6 +4,27 @@ from flask import jsonify
 class Response(object):
 
     @classmethod
+    def created(cls):
+
+        body    = {
+            "meta": {
+                "type": "success",
+                "status_code": 201
+            },
+
+            "body": {
+                "message": "Job was sucessfully created"
+            }
+
+        }
+
+        response                = jsonify(body)
+        response.status_code    = 201
+        response.headers["Server"] = "Don't worry bout it"
+
+        return response
+
+    @classmethod
     def ok(cls, jobs):
 
         body        = {
