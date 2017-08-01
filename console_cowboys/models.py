@@ -63,7 +63,7 @@ class Job(db.Model):
                 print(e) # Eventually log it
                 return ErrorResponse.server_error()
 
-        return self
+        return Response.created()
 
 
     def to_dict(self):

@@ -14,6 +14,7 @@ db      = SQLAlchemy(app)
 stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
 from .models import Job
+from .decorators import protected
 
 @app.route("/jobs")
 @cross_origin()
@@ -34,6 +35,9 @@ def get_jobs_by_contract_type(contract_type):
 @cross_origin()
 def publish_job():
 
+    if request.headers["Content-Type"] == "application/json":
+        return ErrorResponse.json_invalid()
+
     job_data = {
         "listing_url": request.form["listing_url"],
         "is_remote": request.form["is_remote"],
@@ -52,7 +56,7 @@ def publish_job():
             amount=7900,
             currency="usd",
             customer=customer.id,
-            description="{} @ {}".format(job_data["title"],job_data["location"])
+            description="{} @ {}".format(job_data["title"],job_data["company_name"])
         )
     except Exception as e:
         print("Something Happened", e)
@@ -64,6 +68,9 @@ def publish_job():
 
     return Response.created()
 
-    # Step 2: if it's a json request
-    # check that there's a token then verify the token
-    # if they don't match return a 401
+
+@app.route("/jobs/publish", methods=["POST"])
+@protected
+def publish_automated_job():
+    body = request.get_json()
+    return Job.create(body)

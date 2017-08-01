@@ -49,6 +49,45 @@ class ErrorResponse(object):
 Please make sure it's properly formatted before resending."
 
     @classmethod
+    def forbidden(cls):
+
+        body = {
+            "meta": {
+                "type": "error",
+                "status": 403
+            },
+
+            "body": {
+                "message": "You are forbidden from posting to this endpoint"
+            }
+        }
+
+        response = jsonify(body)
+        response.status_code = 403
+        response.headers["Server"] = "Don't Worry bout it"
+        return response
+
+    @classmethod
+    def json_invalid(cls):
+
+        body = {
+
+            "meta": {
+                "type": "error",
+                "status": 400
+            },
+            "body": {
+                "message": "This endpoint does not process json requests"
+            }
+
+        }
+
+        response = jsonify(body)
+        response.status_code = 400
+        response.headers["Server"] = "Don't worry bout it"
+        return response
+
+    @classmethod
     def get_missing_fields(cls, fields):
 
         missing_fields = []
