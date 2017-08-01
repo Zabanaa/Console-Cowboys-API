@@ -1,8 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from console_cowboys.helpers import Response, ErrorResponse
 from console_cowboys import db
 from sqlalchemy_utils import ChoiceType
 from sqlalchemy.exc import IntegrityError
+
+last_month = datetime.today() - timedelta(days=30)
 
 class Job(db.Model):
 
@@ -63,7 +65,7 @@ class Job(db.Model):
                 print(e) # Eventually log it
                 return ErrorResponse.server_error()
 
-        return self
+        return Response.created()
 
 
     def to_dict(self):
@@ -81,7 +83,7 @@ class Job(db.Model):
     @classmethod
     def all(cls):
 
-        job_objects = cls.query.all()
+        job_objects = cls.query.filter(cls.date_added >= last_month).order_by(cls.date_added.desc()).all()
         json_jobs   = [job.to_dict() for job in job_objects]
 
         try:
