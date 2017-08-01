@@ -64,9 +64,7 @@ def publish_job():
     job_data["charge_id"]   = charge.id
     job_data["is_paid"]     = True
 
-    Job.create(job_data)
-
-    return Response.created()
+    return Job.create(job_data)
 
 
 @app.route("/jobs/publish", methods=["POST"])
