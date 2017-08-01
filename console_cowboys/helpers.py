@@ -85,6 +85,8 @@ Please make sure it's properly formatted before resending."
         response = jsonify(body)
         response.status_code = 400
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
 
     @classmethod
