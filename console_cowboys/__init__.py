@@ -9,7 +9,6 @@ app     = Flask(__name__)
 app.config.from_object("console_cowboys.config")
 db      = SQLAlchemy(app)
 
-# Setup stripe keys
 stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
 from .models import Job
@@ -31,21 +30,20 @@ def index():
 def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
-@app.route("/jobs/checkout", methods=["POST"])
+@app.route("/jobs/checkout", methods=["POST", "OPTIONS"])
 @cross_origin(origin="*")
 @protected
 def publish_job():
 
     job_data        = request.get_json()
-
     job_data        = json.loads(job_data)
 
-    customer = stripe.Customer.create(
+    customer        = stripe.Customer.create(
         source=job_data["stripe_token"]
     )
 
     try:
-        charge = stripe.Charge.create(
+        charge      = stripe.Charge.create(
             amount=7900,
             currency="usd",
             customer=customer.id,
