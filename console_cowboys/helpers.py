@@ -21,6 +21,8 @@ class Response(object):
         response                = jsonify(body)
         response.status_code    = 201
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -40,6 +42,8 @@ class Response(object):
         response                = jsonify(body)
         response.status_code    = 200
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -65,6 +69,8 @@ Please make sure it's properly formatted before resending."
         response = jsonify(body)
         response.status_code = 403
         response.headers["Server"] = "Don't Worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
 
     @classmethod
@@ -133,6 +139,8 @@ Please make sure it's properly formatted before resending."
 
         response.status_code = 409
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -157,6 +165,8 @@ Please make sure it's properly formatted before resending."
 
         response.status_code = 422
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -181,6 +191,8 @@ Please make sure it's properly formatted before resending."
 
         response.status_code = 500
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -202,6 +214,8 @@ Please make sure it's properly formatted before resending."
 
         response.status_code = 404
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 
@@ -223,6 +237,8 @@ Please make sure it's properly formatted before resending."
 
         response.status_code = 400
         response.headers["Server"] = "Don't worry bout it"
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
         return response
 

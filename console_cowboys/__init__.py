@@ -1,24 +1,20 @@
 import stripe
 from flask import Flask, request
-from flask_cors  import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from .helpers import Response, ErrorResponse
 
 app     = Flask(__name__)
 app.config.from_object("console_cowboys.config")
-app.config["CORS_HEADERS"] = 'Content-Type'
 db      = SQLAlchemy(app)
-
-cors    = CORS(app, resources={r"/jobs/*": { "origins": "*" }})
 
 # Setup stripe keys
 stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
 from .models import Job
-from .decorators import protected
+from .decorators import protected, crossdomain
 
 @app.route("/jobs")
-@cross_origin(origin="*", headers=["Content-Type"])
+@crossdomain(origin="*")
 def index():
 
     query_string = request.args.get("remote")
@@ -29,12 +25,12 @@ def index():
     return Job.all()
 
 @app.route("/jobs/<string:contract_type>")
-@cross_origin(origin="*", headers=["Content-Type"])
+@crossdomain(origin="*")
 def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
 @app.route("/jobs/checkout", methods=["POST"])
-@cross_origin(origin="*", headers=["Content-Type"])
+@crossdomain(origin="*")
 def publish_job():
 
     if request.headers["Content-Type"] == "application/json":
@@ -68,8 +64,8 @@ def publish_job():
 
     return Job.create(job_data)
 
-
 @app.route("/jobs/publish", methods=["POST"])
+@crossdomain(origin="*")
 def publish_automated_job():
     body = request.get_json()
     return Job.create(body)
