@@ -32,6 +32,7 @@ def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
 @app.route("/jobs/checkout", methods=["POST"])
+@cross_origin(origin="*")
 @protected
 def publish_job():
 

@@ -36,7 +36,6 @@ class Job(db.Model):
             Creates a new Job object, passing it the json_payload
             from the request.
             Immediately call .save() on it
-
         """
         return cls(payload).save()
 
