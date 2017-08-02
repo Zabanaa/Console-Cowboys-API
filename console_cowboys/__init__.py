@@ -1,5 +1,7 @@
 import stripe
+import json
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from .helpers import Response, ErrorResponse
 
@@ -13,8 +15,9 @@ stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 from .models import Job
 from .decorators import protected, crossdomain
 
+cors = CORS(app, resources={r'/*': {"origins": "*"}})
+
 @app.route("/jobs")
-@crossdomain(origin="*")
 def index():
 
     query_string = request.args.get("remote")
@@ -25,28 +28,19 @@ def index():
     return Job.all()
 
 @app.route("/jobs/<string:contract_type>")
-@crossdomain(origin="*")
 def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
 @app.route("/jobs/checkout", methods=["POST"])
-@crossdomain(origin="*", methods=["POST"])
+@protected
 def publish_job():
 
-    if request.headers["Content-Type"] == "application/json":
-        return ErrorResponse.json_invalid()
+    job_data        = request.get_json()
 
-    job_data = {
-        "listing_url": request.form["listing_url"],
-        "is_remote": request.form["is_remote"],
-        "company_name": request.form["company_name"],
-        "title": request.form["job_title"],
-        "contract_type": request.form["contract_type"],
-        "location": request.form["location"],
-    }
+    job_data        = json.loads(job_data)
 
     customer = stripe.Customer.create(
-        source=request.form["stripe_token"]
+        source=job_data["stripe_token"]
     )
 
     try:
@@ -54,18 +48,18 @@ def publish_job():
             amount=7900,
             currency="usd",
             customer=customer.id,
-            description="{} @ {}".format(job_data["title"],job_data["company_name"])
+            description="{} @ {}".format(job_data["job_title"],job_data["company_name"])
         )
     except Exception as e:
-        print("Something Happened", e)
+        print("Something bad happened: ", e)
 
-    job_data["charge_id"]   = charge.id
-    job_data["is_paid"]     = True
+    else:
+        job_data["charge_id"]   = charge.id
+        job_data["is_paid"]     = True
 
     return Job.create(job_data)
 
 @app.route("/jobs/publish", methods=["POST"])
-@crossdomain(origin="*")
 def publish_automated_job():
     body = request.get_json()
     return Job.create(body)

@@ -11,8 +11,6 @@ def protected(func):
         content_type = request.headers["Content-Type"]
         secret_key   = request.headers.get("X-Secret-Key")
 
-        print(secret_key, app.config["SECRET_KEY"])
-
         if content_type != "application/json":
 
             return ErrorResponse.forbidden()

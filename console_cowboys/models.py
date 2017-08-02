@@ -56,9 +56,11 @@ class Job(db.Model):
 
             if "not-null" in cause_of_error:
                 missing_fields = e.__dict__["params"]
+                print(cause_of_error)
                 return ErrorResponse.missing_fields_error(missing_fields)
 
             elif "unique" in cause_of_error:
+                print(cause_of_error)
                 return ErrorResponse.unique_field_error(cause_of_error)
 
             else:
