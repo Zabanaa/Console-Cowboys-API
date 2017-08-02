@@ -30,7 +30,7 @@ def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
 @app.route("/jobs/checkout", methods=["POST"])
-@crossdomain(origin="*")
+@crossdomain(origin="*", methods=["POST"])
 def publish_job():
 
     if request.headers["Content-Type"] == "application/json":
