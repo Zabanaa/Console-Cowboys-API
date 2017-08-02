@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .helpers import Response, ErrorResponse
 
 app     = Flask(__name__)
-cors    = CORS(app)
+cors    = CORS(app, resources=r"/jobs/*")
 app.config.from_object("console_cowboys.config")
 app.config["CORS_HEADERS"] = 'Content-Type'
 db      = SQLAlchemy(app)
@@ -17,7 +17,6 @@ from .models import Job
 from .decorators import protected
 
 @app.route("/jobs")
-@cross_origin()
 def index():
 
     query_string = request.args.get("remote")
@@ -32,11 +31,10 @@ def get_jobs_by_contract_type(contract_type):
     return Job.filter_by_contract_type(contract_type)
 
 @app.route("/jobs/checkout", methods=["POST"])
-@cross_origin()
 def publish_job():
 
-    if request.headers["Content-Type"] == "application/json":
-        return ErrorResponse.json_invalid()
+    # if request.headers["Content-Type"] == "application/json":
+    #     return ErrorResponse.json_invalid()
 
     job_data = {
         "listing_url": request.form["listing_url"],
@@ -68,7 +66,6 @@ def publish_job():
 
 
 @app.route("/jobs/publish", methods=["POST"])
-@protected
 def publish_automated_job():
     body = request.get_json()
     return Job.create(body)
