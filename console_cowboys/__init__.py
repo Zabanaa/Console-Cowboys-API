@@ -35,8 +35,8 @@ def get_jobs_by_contract_type(contract_type):
 @cross_origin()
 def publish_job():
 
-    # if request.headers["Content-Type"] == "application/json":
-    #     return ErrorResponse.json_invalid()
+    if request.headers["Content-Type"] == "application/json":
+        return ErrorResponse.json_invalid()
 
     job_data = {
         "listing_url": request.form["listing_url"],
